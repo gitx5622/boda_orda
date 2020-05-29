@@ -1,9 +1,13 @@
 import React from 'react';
+import Navbar from "./components/Navbar";
+import MainFooter from "./components/MainFooter";
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello World</h1>
+        <Navbar/>
+            <h1>Get your parcel delivered on time</h1>
+        <MainFooter/>
     </div>
   );
 }
