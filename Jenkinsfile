@@ -22,8 +22,8 @@ pipeline{
          stage("Build"){
             steps{
                 echo "Building"
-                sh "npm install"
-                sh "npm build"
+                sh "yarn install"
+                sh "yarn build"
 
             }
             post{
