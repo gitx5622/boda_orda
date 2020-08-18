@@ -4,7 +4,7 @@ pipeline{
 
         registry = "gits5622/boda_orda" 
 
-        registryCredential = 'gits5622' 
+        registryCredential = 'Dockerhub' 
 
         dockerImage = '' 
 
