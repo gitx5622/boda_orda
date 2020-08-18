@@ -18,7 +18,7 @@ pipeline {
 
             steps { 
 
-                git 'https://github.com/gitx5622/boda_orda.git' 
+              checkout scm
 
             }
 
