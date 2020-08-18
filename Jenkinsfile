@@ -4,14 +4,14 @@ node {
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
 
-        checkout scm
+        git 'https://github.com/gitx5622/boda_orda.git'
     }
 
     stage('Build image') {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        app = docker.build("getintodevops/hellonode")
+        app = docker.build("gits5622/boda_orda")
     }
 
     stage('Test image') {
