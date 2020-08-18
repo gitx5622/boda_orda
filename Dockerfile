@@ -1,8 +1,7 @@
 # Dockerfile References: https://docs.docker.com/engine/reference/builder/
 # Start from the latest node base image
-FROM node:latest
+FROM node:7-onbuild
 
-USER root
 # Add Maintainer Info
 LABEL maintainer="George Gitau <gits5622@gmail.com>"
 
