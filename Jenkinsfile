@@ -33,7 +33,7 @@ pipeline{
          stage("Build"){
             steps{
                 echo "Building the application"
-                sh 'docker build -t gits5622/boda_orda:latest .'
+                sh 'docker build -t gits5622/boda_orda'
             }
             post{
                 always{
