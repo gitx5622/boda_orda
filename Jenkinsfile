@@ -1,5 +1,14 @@
 pipeline{
     agent any
+     environment { 
+
+        registry = "gits5622/boda_orda" 
+
+        registryCredential = 'gits5622' 
+
+        dockerImage = '' 
+
+    }
     stages{
         stage("Clone repository"){
             steps{
@@ -21,8 +30,10 @@ pipeline{
         }
          stage("Build"){
             steps{
-                echo "Building"
-            
+                echo "Building the application"
+                script { 
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+                }
             }
             post{
                 always{
@@ -55,7 +66,7 @@ pipeline{
         }
          stage("Deploy"){
             steps{
-                echo "Deploying"
+                echo "Deploying the application"
 
             }
             post{
