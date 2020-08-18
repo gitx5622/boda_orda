@@ -1,36 +1,70 @@
-node {
-    def app
+pipeline { 
 
-    stage('Clone repository') {
-        /* Let's make sure we have the repository cloned to our workspace */
+    environment { 
 
-        git 'https://github.com/gitx5622/boda_orda.git'
+        registry = "gits5622/boda_orda" 
+
+        registryCredential = 'Dockerhub' 
+
+        dockerImage = '' 
+
     }
 
-    stage('Build image') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
+    agent any 
 
-        app = docker.build("gits5622/boda_orda")
-    }
+    stages { 
 
-    stage('Test image') {
-        /* Ideally, we would run a test framework against our image.
-         * For this example, we're using a Volkswagen-type approach */
+        stage('Cloning our Git') { 
 
-        app.inside {
-            sh 'echo "Tests passed"'
+            steps { 
+
+                git 'https://github.com/gitx5622/boda_orda.git' 
+
+            }
+
+        } 
+
+        stage('Building our image') { 
+
+            steps { 
+
+                script { 
+
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+
+                }
+
+            } 
+
         }
-    }
 
-    stage('Push image') {
-        /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('https://registry.hub.docker.com', 'Dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-        }
+        stage('Deploy our image') { 
+
+            steps { 
+
+                script { 
+
+                    docker.withRegistry( '', registryCredential ) { 
+
+                        dockerImage.push() 
+
+                    }
+
+                } 
+
+            }
+
+        } 
+
+        stage('Cleaning up') { 
+
+            steps { 
+
+                sh "docker rmi $registry:$BUILD_NUMBER" 
+
+            }
+
+        } 
+
     }
 }
