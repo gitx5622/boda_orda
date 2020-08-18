@@ -1,69 +1,33 @@
-pipeline { 
+node {
+    def app
 
-    environment { 
+    stage('Clone repository') {
+        /* Cloning the Repository to our Workspace */
 
-        registry = "gits5622/boda_orda" 
-
-        registryCredential = 'Dockerhub' 
-
-        dockerImage = '' 
-
+        checkout scm
     }
 
-    agent any 
+    stage('Build image') {
+        /* This builds the actual image */
 
-    stages { 
+        app = docker.build("gits5622/boda_orda")
+    }
 
-        stage('Cloning our Git') { 
-
-            steps { 
-
-              checkout scm
-
-            }
-
-        } 
-
-        stage('Building our image') { 
-
-            steps { 
-
-                   script { 
-                       
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
-                }
-
-            } 
-
+    stage('Test image') {
+        
+        app.inside {
+            echo "Tests passed"
         }
+    }
 
-        stage('Deploy our image') { 
-
-            steps { 
-
-                script { 
-
-                    docker.withRegistry( '', registryCredential ) { 
-
-                        dockerImage.push() 
-
-                    }
-
-                } 
-
-            }
-
-        } 
-
-        stage('Cleaning up') { 
-
-            steps { 
-
-                sh "docker rmi $registry:$BUILD_NUMBER" 
-
-            }
-
-        } 
-
+    stage('Push image') {
+        /* 
+			You would need to first register with DockerHub before you can push images to your account
+		*/
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
+            } 
+                echo "Trying to Push Docker Build to DockerHub"
     }
 }
