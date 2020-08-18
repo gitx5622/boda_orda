@@ -22,7 +22,6 @@ pipeline{
          stage("Build"){
             steps{
                 echo "Building"
-                sh "yarn install"
                 sh "yarn build"
 
             }
