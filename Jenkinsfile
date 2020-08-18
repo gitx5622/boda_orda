@@ -1,6 +1,6 @@
-pipeline{
-    agent any
-     environment { 
+pipeline { 
+
+    environment { 
 
         registry = "gits5622/boda_orda" 
 
@@ -9,88 +9,63 @@ pipeline{
         dockerImage = '' 
 
     }
-    stages{
-        stage("Clone repository"){
-            steps{
-                echo "Cloning repository"
-                git 'https://github.com/gitx5622/boda_orda.git'
+
+    agent any 
+
+    stages { 
+
+        stage('Cloning our Git') { 
+
+            steps { 
+
+                git 'https://github.com/gitx5622/boda_orda.git' 
 
             }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========A executed successfully========"
-                }
-                failure{
-                    echo "========A execution failed========"
-                }
-            }
-        }
-         stage("Build"){
-            steps{
-                echo "Building the application"
+
+        } 
+
+        stage('Building our image') { 
+
+            steps { 
+
                 script { 
+
                     dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+
                 }
-            }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========A executed successfully========"
-                }
-                failure{
-                    echo "========A execution failed========"
-                }
-            }
+
+            } 
+
         }
-         stage("Test"){
-            steps{
-                echo "Testing using Selenium"
-               
-            }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========A executed successfully========"
-                }
-                failure{
-                    echo "========A execution failed========"
-                }
-            }
-        }
-         stage("Deploy"){
-            steps{
-                echo "Deploying the application"
+
+        stage('Deploy our image') { 
+
+            steps { 
+
+                script { 
+
+                    docker.withRegistry( '', registryCredential ) { 
+
+                        dockerImage.push() 
+
+                    }
+
+                } 
 
             }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========A executed successfully========"
-                }
-                failure{
-                    echo "========A execution failed========"
-                }
+
+        } 
+
+        stage('Cleaning up') { 
+
+            steps { 
+
+                sh "docker rmi $registry:$BUILD_NUMBER" 
+
             }
-        }
+
+        } 
+
     }
-    post{
-        always{
-            echo "========always========"
-        }
-        success{
-            echo "========pipeline executed successfully ========"
-        }
-        failure{
-            echo "========pipeline execution failed========"
-        }
-    }
+
 }
