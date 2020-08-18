@@ -22,7 +22,7 @@ pipeline{
          stage("Build"){
             steps{
                 echo "Building"
-                sh "yarn build"
+                sh "npm run build"
 
             }
             post{
