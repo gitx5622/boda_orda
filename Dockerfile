@@ -17,4 +17,4 @@ HEALTHCHECK --interval=5s \
 EXPOSE 3000
 
 #Run the application
-RUN npm run
+RUN yarn start
