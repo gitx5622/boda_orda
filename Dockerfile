@@ -5,8 +5,13 @@ FROM node:latest
 # Add Maintainer Info
 LABEL maintainer="George Gitau <gits5622@gmail.com>"
 
+# Set the working directory to /home/app
+WORKDIR /
+
+# Bundle app source
+COPY . /
 # Run npm install to install dependencies
-RUN npm install npm@latest -g
+RUN npm install
 
 # set a health check
 HEALTHCHECK --interval=5s \
@@ -17,4 +22,4 @@ HEALTHCHECK --interval=5s \
 EXPOSE 3000
 
 #Run the application
-RUN npm start
+CMD npm start
