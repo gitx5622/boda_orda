@@ -12,3 +12,6 @@ HEALTHCHECK --interval=5s \
 
 # Expose port 8080 to the outside world
 EXPOSE 3000
+
+#Run the application
+RUN npm start
