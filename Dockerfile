@@ -6,7 +6,7 @@ FROM node:latest
 LABEL maintainer="George Gitau <gits5622@gmail.com>"
 
 # Run npm install to install dependencies
-RUN yarn install
+RUN npm install -d
 
 # set a health check
 HEALTHCHECK --interval=5s \
