@@ -5,6 +5,9 @@ FROM node:7-onbuild
 # Add Maintainer Info
 LABEL maintainer="George Gitau <gits5622@gmail.com>"
 
+# Run npm install to install dependencies
+RUN npm install
+
 # set a health check
 HEALTHCHECK --interval=5s \
             --timeout=5s \
